@@ -32,3 +32,5 @@ PCB:
 Wiring Schematic:
 ![Schematic](README/ScreenshotSchematic.png)
 
+Completed Design:
+![Completed](README/Completed.jpeg)
