@@ -22,27 +22,6 @@ def CheckMatrix():
 
         ROW[maggio].value=False
 
-#Funzione per controllo dell'encoder
-def CheckEncoder():
-    current_position = encoder.position
-    
-    if current_position != last_position:
-        if current_position > last_position:
-            # Rotazione Oraria -> Blu
-            led.fill((0, 0, 255))
-            print("Rotazione Oraria (+)")
-        else:
-            # Rotazione Antioraria -> Giallo
-            led.fill((255, 255, 0))
-            print("Rotazione Antioraria (-)")
-            
-        last_position = current_position
-        
-        # Aspetta un attimo e spegni il LED per evidenziare lo scatto
-        time.sleep(0.05)
-        led.fill((0, 0, 0))
-
-
 led = neopixel.NeoPixel(board.NEOPIXEL, 1)
 led.brightness=0.3
 led.fill((0,0,0))
@@ -74,13 +53,32 @@ for tello in range(len(COL)):
 #KEYMAP
 kbd = Keyboard(usb_hid.devices)
 
-MAP = [[Keycode.F13, Keycode.F14, Keycode.F15, Keycode.F16], 
-       [Keycode.F17, Keycode.F18, Keycode.F19, Keycode.F20], 
+MAP = [[Keycode.F13, Keycode.F14, Keycode.F15, Keycode.F16],
+       [Keycode.F17, Keycode.F18, Keycode.F19, Keycode.F20],
        [Keycode.F21, Keycode.F22, Keycode.F23, Keycode.F24]]
 
 while True:
     led.fill((0,0,0))
-    CheckMatrix
+    CheckMatrix()
+    current_position = encoder.position
+
+    if current_position != last_position:
+        if current_position > last_position:
+            # Rotazione Oraria -> Blu
+            kbd.send(Keycode.SHIFT, Keycode.F1)
+            led.fill((0, 0, 255))
+            print("Rotazione Oraria (+)")
+        else:
+            # Rotazione Antioraria -> Giallo
+            kbd.send(Keycode.CONTROL, Keycode.F1)
+            led.fill((255, 255, 0))
+            print("Rotazione Antioraria (-)")
+
+        last_position = current_position
+
+        # Aspetta un attimo e spegni il LED per evidenziare lo scatto
+        time.sleep(0.05)
+        led.fill((0, 0, 0))
 
 
 
